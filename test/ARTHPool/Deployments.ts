@@ -1,7 +1,5 @@
 import { ethers } from 'hardhat';
-import chai, { expect } from 'chai';
-import { solidity } from 'ethereum-waffle';
-import { BigNumber, Contract, ContractFactory, utils } from 'ethers';
+import { Contract, ContractFactory, utils } from 'ethers';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/dist/src/signer-with-address';
 
 export default async () => {
@@ -19,6 +17,7 @@ export default async () => {
   let ARTHPool: ContractFactory;
   let BondingCurve: ContractFactory;
   let SimpleOracle: ContractFactory;
+  let SimpleERCFund: ContractFactory;
   let MockCollateral: ContractFactory;
   let ARTHController: ContractFactory;
   let ARTHPoolLibrary: ContractFactory;
@@ -34,6 +33,7 @@ export default async () => {
   let arthPool: Contract;
   let gmuOracle: Contract;
   let bondingCurve: Contract;
+  let simpleERCFund: Contract;
   let arthController: Contract;
   let arthPoolLibrary: Contract;
   let daiETHUniswapOracle: Contract;
@@ -75,10 +75,14 @@ export default async () => {
   MockChainlinkAggregatorV3 = await ethers.getContractFactory(
     'MockChainlinkAggregatorV3'
   );
+  SimpleERCFund = await ethers.getContractFactory(
+    'SimpleERCFund'
+  );
 
   arth = await ARTH.deploy();
   maha = await MAHA.deploy();
   arthx = await ARTHX.deploy();
+  simpleERCFund = await SimpleERCFund.deploy();
   dai = await MockCollateral.deploy(owner.address, ETH.mul(1000000000), 'DAI', 18);
 
   bondingCurve = await BondingCurve.deploy(1e6);
@@ -114,7 +118,6 @@ export default async () => {
     owner.address, // Temp address for weth in mock oracles.
     daiETHUniswapOracle.address,
     daiUSDMockChainlinkAggregatorV3.address,
-    // ethUSDMockChainlinkAggregatorV3.address,
     gmuOracle.address
   );
 
@@ -126,6 +129,7 @@ export default async () => {
   await arth.setArthController(arthController.address);
 
   await arthPool.setCollatGMUOracle(oracle.address);
+  await arthPool.setFund(simpleERCFund.address);
 
   await arthController.setARTHXGMUOracle(arthxARTHUniswapOracle.address);
   await arthController.setMAHAGMUOracle(mahaARTHUniswapOracle.address);
@@ -154,6 +158,7 @@ export default async () => {
     arthPool,
     gmuOracle,
     bondingCurve,
+    simpleERCFund,
     arthController,
     arthPoolLibrary,
     daiETHUniswapOracle,
@@ -162,5 +167,5 @@ export default async () => {
     recollaterizationCurve,
     ethUSDMockChainlinkAggregatorV3,
     daiUSDMockChainlinkAggregatorV3,
-  }
+  };
 }

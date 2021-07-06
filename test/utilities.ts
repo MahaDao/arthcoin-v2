@@ -12,6 +12,20 @@ export function encodeParameters(
   return abi.encode(types, values);
 }
 
+export async function wait(
+  ethers: any,
+  hash: string,
+  desc?: string,
+  confirmation: number = 1
+): Promise<void> {
+  if (desc) {
+    console.log(`Waiting tx ${hash}. action = ${desc}\n`);
+  } else {
+    console.log(`Waiting tx ${hash}\n`);
+  }
+  await ethers.provider.waitForTransaction(hash, confirmation);
+}
+
 export async function latestBlocktime(provider: Provider): Promise<number> {
   const { timestamp } = await provider.getBlock('latest');
   return timestamp;

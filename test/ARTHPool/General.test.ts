@@ -116,7 +116,7 @@ describe('ARTHPool General', () => {
         .to.eq(1e3);
     });
 
-    it(' - Should get collateral price properly using uniswap oracle', async () => {
+    it(' - Should get collateral price properly using chainlink oracle', async () => {
       expect(await arthPool.getCollateralPrice())
         .to.eq(1e6);
 
@@ -141,32 +141,32 @@ describe('ARTHPool General', () => {
       await gmuOracle.setPrice(1e3);
       await daiUSDMockChainlinkAggregatorV3.setLatestPrice(106382900);
       expect(await arthPool.getCollateralPrice())
-        .to.eq(BigNumber.from(1063));
+        .to.eq(BigNumber.from(1063829000));
 
       await gmuOracle.setPrice(1e3);
       await daiUSDMockChainlinkAggregatorV3.setLatestPrice(94339600);
       expect(await arthPool.getCollateralPrice())
-        .to.eq(943);
+        .to.eq(943396000);
 
       await gmuOracle.setPrice(3e3);
       await daiUSDMockChainlinkAggregatorV3.setLatestPrice(106382900);
       expect(await arthPool.getCollateralPrice())
-        .to.eq(BigNumber.from(3191));
+        .to.eq(BigNumber.from(354609666));
 
       await gmuOracle.setPrice(3e3);
       await daiUSDMockChainlinkAggregatorV3.setLatestPrice(94339600);
       expect(await arthPool.getCollateralPrice())
-        .to.eq(2830);
+        .to.eq(314465333);
 
       await gmuOracle.setPrice(1e7);
       await daiUSDMockChainlinkAggregatorV3.setLatestPrice(106382900);
       expect(await arthPool.getCollateralPrice())
-        .to.eq(BigNumber.from(10638290));
+        .to.eq(106382);
 
       await gmuOracle.setPrice(1e7);
       await daiUSDMockChainlinkAggregatorV3.setLatestPrice(94339600);
       expect(await arthPool.getCollateralPrice())
-        .to.eq(9433960);
+        .to.eq(94339);
     });
 
     it(' - Should get collateral balance properly using chainlink oracle', async () => {
@@ -186,22 +186,22 @@ describe('ARTHPool General', () => {
       await gmuOracle.setPrice(3e3);
       await daiUSDMockChainlinkAggregatorV3.setLatestPrice(106382900);
       expect(await arthPool.getCollateralGMUBalance())
-        .to.eq(BigNumber.from('3191000000000000'));
+        .to.eq(BigNumber.from('354609666000000000000'));
 
       await gmuOracle.setPrice(3e3);
       await daiUSDMockChainlinkAggregatorV3.setLatestPrice(94339600);
       expect(await arthPool.getCollateralGMUBalance())
-        .to.eq(BigNumber.from('2830000000000000'));
+        .to.eq(BigNumber.from('314465333000000000000'));
 
       await gmuOracle.setPrice(4e7);
       await daiUSDMockChainlinkAggregatorV3.setLatestPrice(106382900);
       expect(await arthPool.getCollateralGMUBalance())
-        .to.eq(BigNumber.from('42553160000000000000'));
+        .to.eq(BigNumber.from('26595000000000000'));
 
       await gmuOracle.setPrice(4e7);
       await daiUSDMockChainlinkAggregatorV3.setLatestPrice(94339600);
       expect(await arthPool.getCollateralGMUBalance())
-        .to.eq(BigNumber.from('37735840000000000000'));
+        .to.eq(BigNumber.from('23584000000000000'));
     });
 
     it(' - Should estimate MAHA stability fee properly', async () => {
